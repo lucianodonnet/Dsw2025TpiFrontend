@@ -39,7 +39,7 @@ function LoginPage() {
         <h2>Inicio de Sesión</h2>
 
         <fieldset>
-          <label htmlFor="username">Correo Electrónico:</label>
+          <label htmlFor="username">Usuario:</label>
           <input
             type="text"
             id="username"

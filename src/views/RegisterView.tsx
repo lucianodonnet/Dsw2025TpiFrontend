@@ -8,6 +8,7 @@ function RegisterView() {
   const [user, setUser] = useState({
     username: "",
     password: "",
+    email: "",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,7 +35,7 @@ function RegisterView() {
         <h2>Registro</h2>
 
         <fieldset>
-          <label htmlFor="username">Correo Electrónico:</label>
+          <label htmlFor="username">Usuario:</label>
           <input
             type="text"
             id="username"
@@ -54,7 +55,17 @@ function RegisterView() {
             onChange={handleChange}
           />
         </fieldset>
-
+        <fieldset>
+          <label htmlFor="email">Email:</label>
+          <input
+            type="text"
+            id="email"
+            name="email"
+            value={user.email}
+            onChange={handleChange}
+            // You might want to add state and validation for confirm password
+          />
+        </fieldset>
         <button type="submit">Registrarse</button>
         <p>
           ¿Ya tienes una cuenta? <Link to="/login">Inicia sesión</Link>
