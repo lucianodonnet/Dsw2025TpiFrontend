@@ -1,9 +1,12 @@
+import { API_URL } from "../config";
+
 export const register = async (credentials: {
+  fullName: string;
   username: string;
   password: string;
 }) => {
   try {
-    const response = await fetch("https://localhost:7138/api/auth/register", {
+    const response = await fetch(`${API_URL}/auth/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(credentials),
@@ -21,7 +24,7 @@ export const login = async (credentials: {
   password: string;
 }) => {
   try {
-    const response = await fetch("https://localhost:7138/api/auth/login", {
+    const response = await fetch(`${API_URL}/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(credentials),
@@ -32,6 +35,6 @@ export const login = async (credentials: {
     return data;
   } catch (error) {
     console.error("Error en login:", error);
-    return { message: "No se pudo conectar con el servidor" };
+    return { error };
   }
 };

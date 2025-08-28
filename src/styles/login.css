@@ -7,6 +7,14 @@ body {
   align-items: center;
   height: 100vh;
   margin: auto;
+  background-image: url('src/assets/images/fondo.png');
+  background-size: cover;
+  /* ajusta la imagen para cubrir todo */
+  background-position: center;
+  /* centra la imagen */
+  background-repeat: no-repeat;
+  /* evita que se repita */
+
 }
 
 /* Títulos */
@@ -16,10 +24,11 @@ h1 {
   font-size: 45px;
   margin-bottom: 20px;
 }
+
 h2 {
   text-align: center;
   color: #000000;
-  font-size: 40px;
+  font-size: 35px;
   margin-bottom: 20px;
 }
 
@@ -66,6 +75,7 @@ input[type="password"] {
   font-size: 16px;
   transition: border-color 0.3s ease;
 }
+
 input:focus {
   border-color: #0078d4;
   outline: none;
@@ -83,6 +93,7 @@ button {
   width: 100%;
   transition: background-color 0.3s ease;
 }
+
 button:hover {
   background-color: #005fa3;
 }

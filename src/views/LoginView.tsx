@@ -3,8 +3,13 @@ import { login } from "../services/authService";
 import logo from "../assets/images/plataformarar.png";
 import "../styles/login.css";
 import { Link } from "react-router-dom";
+import Popup from "../components/Popup";
+
+
 
 function LoginPage() {
+  const [error, setError] = useState<string>("");
+  const [satisfactorio, setSatisfactorio] = useState<string>("");
   const [user, setUser] = useState({
     username: "",
     password: "",
@@ -25,9 +30,11 @@ function LoginPage() {
 
     if (data?.token) {
       localStorage.setItem("token", data.token);
-      alert("Inicio de sesión exitoso");
+      setSatisfactorio("Bienvenido")
     } else {
-      alert(data?.message || "Credenciales inválidas");
+      setError(data?.message || "Credenciales inválidas");
+
+
     }
   };
 
@@ -36,7 +43,7 @@ function LoginPage() {
       <form onSubmit={handleSubmit}>
         <img src={logo} alt="Logo" className="logo" />
         <h1>PLATAFORMA ARAR</h1>
-        <h2>Inicio de Sesión</h2>
+        <h2>INICIAR SESIÓN</h2>
 
         <fieldset>
           <label htmlFor="username">Correo Electrónico:</label>
@@ -63,6 +70,21 @@ function LoginPage() {
           ¿No tienes una cuenta? <Link to="/register">Registrate</Link>
         </p>
       </form>
+
+      {error && (
+        <Popup
+          message={error}
+          onClose={() => setError("")}
+        />
+      )}
+
+      {satisfactorio && (
+        <Popup
+          message={"Bienvenid@"}
+          onClose={() => setSatisfactorio("")}
+        />
+      )}
+
     </>
   );
 }
