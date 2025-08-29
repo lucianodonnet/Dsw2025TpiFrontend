@@ -33,8 +33,6 @@ function LoginPage() {
       setSatisfactorio("Bienvenido")
     } else {
       setError(data?.message || "Credenciales inválidas");
-
-
     }
   };
 
