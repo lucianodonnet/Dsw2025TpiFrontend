@@ -57,6 +57,7 @@ function RegisterView() {
             name="username"
             value={user.username}
             onChange={handleChange}
+          
           />
         </fieldset>
 
@@ -68,6 +69,7 @@ function RegisterView() {
             name="password"
             value={user.password}
             onChange={handleChange}
+            
           />
         </fieldset>
 

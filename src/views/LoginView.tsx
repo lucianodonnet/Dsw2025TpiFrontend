@@ -5,8 +5,6 @@ import "../styles/login.css";
 import { Link } from "react-router-dom";
 import Popup from "../components/Popup";
 
-
-
 function LoginPage() {
   const [error, setError] = useState<string>("");
   const [satisfactorio, setSatisfactorio] = useState<string>("");
@@ -14,23 +12,46 @@ function LoginPage() {
     username: "",
     password: "",
   });
+ 
+  const [passwordError, setPasswordError] = useState<string>("");
 
   const handleUsernameInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUser({ ...user, username: e.target.value });
   };
 
   const handlePasswordInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUser({ ...user, password: e.target.value });
+    const newPassword = e.target.value;
+    setUser({ ...user, password: newPassword });
+
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])(?=.{8,}).*$/;
+
+    if (passwordRegex.test(newPassword)) {
+      setPasswordError("");
+    } else {
+      
+      setPasswordError(
+        "La contraseña debe tener al menos: una mayúscula, una minúscula, un número, un símbolo (!@#$%^&*) y 8 caracteres de longitud."
+      );
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    
+    
+    
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])(?=.{8,}).*$/;
+    if (!passwordRegex.test(user.password)) {
+      setError("Por favor, corrige el formato de la contraseña.");
+      return; 
+    }
+    
+    
     const data = await login(user);
 
     if (data?.token) {
       localStorage.setItem("token", data.token);
-      setSatisfactorio("Bienvenido")
+      setSatisfactorio("Bienvenido");
     } else {
       setError(data?.message || "Credenciales inválidas");
     }
@@ -50,6 +71,7 @@ function LoginPage() {
             id="username"
             value={user.username}
             onChange={handleUsernameInput}
+            required
           />
         </fieldset>
 
@@ -60,7 +82,10 @@ function LoginPage() {
             id="password"
             value={user.password}
             onChange={handlePasswordInput}
+            required
           />
+         
+          {passwordError && <p style={{ color: "red" }}>{passwordError}</p>}
         </fieldset>
 
         <button type="submit">Enviar</button>
@@ -82,7 +107,6 @@ function LoginPage() {
           onClose={() => setSatisfactorio("")}
         />
       )}
-
     </>
   );
 }
