@@ -9,14 +9,14 @@ function LoginPage() {
   const [error, setError] = useState<string>("");
   const [satisfactorio, setSatisfactorio] = useState<string>("");
   const [user, setUser] = useState({
-    username: "",
+    email: "",
     password: "",
   });
- 
+
   const [passwordError, setPasswordError] = useState<string>("");
 
   const handleUsernameInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUser({ ...user, username: e.target.value });
+    setUser({ ...user, email: e.target.value });
   };
 
   const handlePasswordInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,7 +28,7 @@ function LoginPage() {
     if (passwordRegex.test(newPassword)) {
       setPasswordError("");
     } else {
-      
+
       setPasswordError(
         "La contraseña debe tener al menos: una mayúscula, una minúscula, un número, un símbolo (!@#$%^&*) y 8 caracteres de longitud."
       );
@@ -37,16 +37,16 @@ function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    
-    
+
+
+
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])(?=.{8,}).*$/;
     if (!passwordRegex.test(user.password)) {
       setError("Por favor, corrige el formato de la contraseña.");
-      return; 
+      return;
     }
-    
-    
+
+
     const data = await login(user);
 
     if (data?.token) {
@@ -65,11 +65,11 @@ function LoginPage() {
         <h2>INICIAR SESIÓN</h2>
 
         <fieldset>
-          <label htmlFor="username">Correo Electrónico:</label>
+          <label htmlFor="email">Correo Electrónico:</label>
           <input
-            type="text"
-            id="username"
-            value={user.username}
+            type="email"
+            id="email"
+            value={user.email}
             onChange={handleUsernameInput}
             required
           />
@@ -84,7 +84,7 @@ function LoginPage() {
             onChange={handlePasswordInput}
             required
           />
-         
+
           {passwordError && <p style={{ color: "red" }}>{passwordError}</p>}
         </fieldset>
 

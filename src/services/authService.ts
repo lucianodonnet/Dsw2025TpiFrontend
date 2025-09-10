@@ -1,15 +1,25 @@
 import { API_URL } from "../config";
 
 export const register = async (credentials: {
-  fullName: string;
-  username: string;
-  password: string;
+  Username: string;
+  Password: string;
+  Email: string;
+  Nombre: string;
+  Apellido: string;
+  FechaNacimiento: string;
 }) => {
   try {
+    console.log(credentials)
+    const credentialsToSend = {
+      ...credentials,
+      FechaNacimiento: credentials.FechaNacimiento
+        ? new Date(credentials.FechaNacimiento).toISOString().split("T")[0]
+        : ""
+    };
     const response = await fetch(`${API_URL}/auth/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(credentials),
+      body: JSON.stringify(credentialsToSend),
     });
 
     return await response.json();
@@ -20,7 +30,7 @@ export const register = async (credentials: {
 };
 
 export const login = async (credentials: {
-  username: string;
+  email: string;
   password: string;
 }) => {
   try {

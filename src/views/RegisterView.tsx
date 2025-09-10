@@ -5,27 +5,40 @@ import logo from "../assets/images/plataformarar.png";
 import { Link } from "react-router-dom";
 import ErrorPopup from "../components/Popup";
 
+
+
 function RegisterView() {
   const [error, setError] = useState<string>("");
   const [user, setUser] = useState({
-    fullName: "",
-    username: "",
-    password: "",
+    Apellido: "",
+    Nombre: "",
+    Username: "",
+    Password: "",
+    Email: "",
+    FechaNacimiento: "",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setUser({ ...user, [name.charAt(0).toUpperCase() + name.slice(1)]: value });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+
     const data = await register(user);
+
 
     if (data?.id) {
       alert("Usuario registrado con éxito");
     } else {
-      setError(data?.message || "Credenciales inválidas");
+      const errorMsg =
+        data?.message ||
+        data?.title ||
+        "Credenciales inválidas";
+
+      setError(errorMsg);
     }
   };
 
@@ -36,28 +49,47 @@ function RegisterView() {
         <h1>PLATAFORMA ARAR</h1>
         <h2>REGISTRARSE</h2>
 
-
         <fieldset>
-          <label htmlFor="fullName">Apellido y Nombre:</label>
+          <label htmlFor="username">Nombre de Usuario</label>
           <input
             type="text"
-            id="fullName"
-            name="fullName"
-            value={user.fullName}
+            id="username"
+            name="Username"
+            value={user.Username}
             onChange={handleChange}
           />
         </fieldset>
 
-
         <fieldset>
-          <label htmlFor="username">Correo Electrónico:</label>
+          <label htmlFor="apellido">Apellido</label>
           <input
             type="text"
-            id="username"
-            name="username"
-            value={user.username}
+            id="apellido"
+            name="Apellido"
+            value={user.Apellido}
             onChange={handleChange}
-          
+          />
+        </fieldset>
+
+        <fieldset>
+          <label htmlFor="nombre">Nombre</label>
+          <input
+            type="text"
+            id="nombre"
+            name="Nombre"
+            value={user.Nombre}
+            onChange={handleChange}
+          />
+        </fieldset>
+
+        <fieldset>
+          <label htmlFor="email">Correo Electrónico:</label>
+          <input
+            type="email"
+            id="email"
+            name="Email"
+            value={user.Email}
+            onChange={handleChange}
           />
         </fieldset>
 
@@ -66,10 +98,20 @@ function RegisterView() {
           <input
             type="password"
             id="password"
-            name="password"
-            value={user.password}
+            name="Password"
+            value={user.Password}
             onChange={handleChange}
-            
+          />
+        </fieldset>
+
+        <fieldset>
+          <label htmlFor="fechaNacimiento">Fecha de Nacimiento:</label>
+          <input
+            type="date"
+            id="fechaNacimiento"
+            name="FechaNacimiento"
+            value={user.FechaNacimiento}
+            onChange={handleChange}
           />
         </fieldset>
 
