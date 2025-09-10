@@ -30,16 +30,12 @@ function RegisterView() {
     const data = await register(user);
 
 
-    if (data?.id) {
+    if (data.ok && data.id) {
       alert("Usuario registrado con éxito");
     } else {
-      const errorMsg =
-        data?.message ||
-        data?.title ||
-        "Credenciales inválidas";
-
-      setError(errorMsg);
+      setError(data.message || "Error en el registro");
     }
+
   };
 
   return (

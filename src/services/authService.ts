@@ -22,16 +22,28 @@ export const register = async (credentials: {
       body: JSON.stringify(credentialsToSend),
     });
 
-    return await response.json();
+    const data = await response.json();
+
+    // Retornar el cuerpo aunque haya error
+    return {
+      ok: response.ok,
+      status: response.status,
+      ...data
+    };
   } catch (error) {
     console.error("Error en registro:", error);
-    return { message: "No se pudo conectar con el servidor" };
+    return {
+      ok: false,
+      message: "No se pudo conectar con el servidor"
+    };
   }
+
+
 };
 
 export const login = async (credentials: {
-  email: string;
-  password: string;
+  Email: string;
+  Password: string;
 }) => {
   try {
     const response = await fetch(`${API_URL}/auth/login`, {

@@ -9,19 +9,19 @@ function LoginPage() {
   const [error, setError] = useState<string>("");
   const [satisfactorio, setSatisfactorio] = useState<string>("");
   const [user, setUser] = useState({
-    email: "",
-    password: "",
+    Email: "",
+    Password: "",
   });
 
   const [passwordError, setPasswordError] = useState<string>("");
 
   const handleUsernameInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUser({ ...user, email: e.target.value });
+    setUser({ ...user, Email: e.target.value });
   };
 
   const handlePasswordInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newPassword = e.target.value;
-    setUser({ ...user, password: newPassword });
+    setUser({ ...user, Password: newPassword });
 
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])(?=.{8,}).*$/;
 
@@ -41,7 +41,7 @@ function LoginPage() {
 
 
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])(?=.{8,}).*$/;
-    if (!passwordRegex.test(user.password)) {
+    if (!passwordRegex.test(user.Password)) {
       setError("Por favor, corrige el formato de la contraseña.");
       return;
     }
@@ -69,7 +69,8 @@ function LoginPage() {
           <input
             type="email"
             id="email"
-            value={user.email}
+            name="Email"
+            value={user.Email}
             onChange={handleUsernameInput}
             required
           />
@@ -80,7 +81,7 @@ function LoginPage() {
           <input
             type="password"
             id="password"
-            value={user.password}
+            value={user.Password}
             onChange={handlePasswordInput}
             required
           />
