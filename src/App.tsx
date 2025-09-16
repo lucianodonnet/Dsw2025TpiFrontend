@@ -1,22 +1,19 @@
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoginView from "./views/LoginView";
 import RegisterView from "./views/RegisterView";
-import DashBoardProfessorView from "./views/DashboardProfessorView";
+import Dashboard from "./views/Dashboard";
 
 function App() {
+  const user = {
+    photoURL: "https://lh3.googleusercontent.com/a-/AOh14Ghxxxxxx=s96-c", // Aquí irá el avatar real de Google
+  };
+
   return (
     <Router>
-      <nav style={{ textAlign: "center", margin: "20px" }}>
-        {/* navegación simple */}
-
-      </nav>
-
       <Routes>
         <Route path="/login" element={<LoginView />} />
         <Route path="/register" element={<RegisterView />} />
-        <Route path="/Dashboardprofessor" element={<DashBoardProfessorView />} />
-
-        {/* ruta por defecto */}
+        <Route path="/dashboard" element={<Dashboard user={user} />} />
         <Route path="*" element={<LoginView />} />
       </Routes>
     </Router>
