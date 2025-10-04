@@ -4,7 +4,8 @@ import "../styles/login.css";
 import logo from "../assets/images/plataformarar.png";
 import { Link } from "react-router-dom";
 import ErrorPopup from "../components/Popup";
-
+import FieldText from "../components/common/Field";
+import { validPassword } from "../utils/auth";
 
 
 function RegisterView() {
@@ -23,10 +24,22 @@ function RegisterView() {
     setUser({ ...user, [name.charAt(0).toUpperCase() + name.slice(1)]: value });
   };
 
+  
+  const [passwordErrors, setPasswordError] = useState<{message: string, isValid: boolean}[]>([]);
+  const handlePasswordInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+
+    
+    const newPassword = e.target.value;
+    setUser({ ...user, Password: newPassword });
+    const message = validPassword(newPassword);
+    let mappedMessages = message.map(([msg, isValid]) => ({message: msg, isValid}));
+    setPasswordError(mappedMessages);
+  };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-
+  
     const data = await register(user);
 
 
@@ -45,71 +58,65 @@ function RegisterView() {
         <h1>PLATAFORMA ARAR</h1>
         <h2>REGISTRARSE</h2>
 
-        <fieldset>
-          <label htmlFor="username">Nombre de Usuario</label>
-          <input
-            type="text"
-            id="username"
-            name="Username"
-            value={user.Username}
-            onChange={handleChange}
-          />
-        </fieldset>
+        <FieldText
+        id="apellido" 
+        name="Apellido" 
+        value={user.Apellido} 
+        onChange={handleChange}
+        label="Apellido"
+        isRequired
+        ></FieldText>
 
-        <fieldset>
-          <label htmlFor="apellido">Apellido</label>
-          <input
-            type="text"
-            id="apellido"
-            name="Apellido"
-            value={user.Apellido}
-            onChange={handleChange}
-          />
-        </fieldset>
+        <FieldText
+        id="nombre" 
+        name="Nombre" 
+        value={user.Nombre} 
+        onChange={handleChange}
+        label="Nombre"
+        isRequired
+        ></FieldText>
 
-        <fieldset>
-          <label htmlFor="nombre">Nombre</label>
-          <input
-            type="text"
-            id="nombre"
-            name="Nombre"
-            value={user.Nombre}
-            onChange={handleChange}
-          />
-        </fieldset>
 
-        <fieldset>
-          <label htmlFor="email">Correo Electrónico:</label>
-          <input
-            type="email"
-            id="email"
-            name="Email"
-            value={user.Email}
-            onChange={handleChange}
-          />
-        </fieldset>
+        <FieldText 
+        id="username" 
+        name="Username" 
+        value={user.Username} 
+        onChange={handleChange}
+        label="Usuario"
+        isRequired
+        ></FieldText>
 
-        <fieldset>
-          <label htmlFor="password">Contraseña:</label>
-          <input
-            type="password"
-            id="password"
-            name="Password"
-            value={user.Password}
-            onChange={handleChange}
-          />
-        </fieldset>
+        <FieldText
+        type="password"
+        id="password" 
+        name="Password" 
+        value={user.Password} 
+        onChange={handlePasswordInput}
+        label="Contraseña"
+        isRequired
+        >{
+            <div {...passwordErrors.length > 0 ? <p>La contraseña no cumple con los requisitos:</p> 
+            : ""}>
+            {
+              passwordErrors.map((err, index) => (
+                  <p key={index} style={{ color: err.isValid? "red":"green", fontSize: "0.8em", margin: "0" }}>
+                  {(err.isValid? "✖️": "✔️") + " - "  + err.message}
+                  </p>
+              ))
+            }
+            </div>
+            
+          }</FieldText>
 
-        <fieldset>
-          <label htmlFor="fechaNacimiento">Fecha de Nacimiento:</label>
-          <input
-            type="date"
-            id="fechaNacimiento"
-            name="FechaNacimiento"
-            value={user.FechaNacimiento}
-            onChange={handleChange}
-          />
-        </fieldset>
+        <FieldText
+        type="date"
+        id="fechaNacimiento" 
+        name="FechaNacimiento" 
+        value={user.Password} 
+        onChange={handleChange}
+        label="Fecha de Nacimiento"
+        isRequired
+        ></FieldText>
 
         <button type="submit">Registrarse</button>
         <p>

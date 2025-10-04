@@ -4,7 +4,8 @@ import logo from "../assets/images/plataformarar.png";
 import "../styles/login.css";
 import { Link } from "react-router-dom";
 import Popup from "../components/Popup";
-
+import { validPassword } from "../utils/auth";
+import FieldText from "../components/common/Field";
 function LoginPage() {
   const [error, setError] = useState<string>("");
   const [satisfactorio, setSatisfactorio] = useState<string>("");
@@ -13,7 +14,7 @@ function LoginPage() {
     Password: "",
   });
 
-  const [passwordError, setPasswordError] = useState<string>("");
+  const [passwordError, setPasswordError] = useState<{message: string, isValid: Boolean}[]>([]);
 
   const handleUsernameInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUser({ ...user, Email: e.target.value });
@@ -22,31 +23,17 @@ function LoginPage() {
   const handlePasswordInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newPassword = e.target.value;
     setUser({ ...user, Password: newPassword });
-
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])(?=.{8,}).*$/;
-
-    if (passwordRegex.test(newPassword)) {
-      setPasswordError("");
-    } else {
-
-      setPasswordError(
-        "La contraseña debe tener al menos: una mayúscula, una minúscula, un número, un símbolo (!@#$%^&*) y 8 caracteres de longitud."
-      );
-    }
+    const message = validPassword(newPassword);
+    const mappedMessages = message.map(([msg, isValid]) => ({message: msg, isValid: isValid}));
+    setPasswordError(mappedMessages);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-
-
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])(?=.{8,}).*$/;
-    if (!passwordRegex.test(user.Password)) {
+    if (!validPassword(user.Password)) {
       setError("Por favor, corrige el formato de la contraseña.");
       return;
     }
-
-
     const data = await login(user);
 
     if (data?.token) {
@@ -64,30 +51,39 @@ function LoginPage() {
         <h1>PLATAFORMA ARAR</h1>
         <h2>INICIAR SESIÓN</h2>
 
-        <fieldset>
-          <label htmlFor="email">Correo Electrónico:</label>
-          <input
-            type="email"
-            id="email"
-            name="Email"
-            value={user.Email}
-            onChange={handleUsernameInput}
-            required
-          />
-        </fieldset>
-
-        <fieldset>
-          <label htmlFor="password">Contraseña:</label>
-          <input
-            type="password"
-            id="password"
-            value={user.Password}
-            onChange={handlePasswordInput}
-            required
-          />
-
-          {passwordError && <p style={{ color: "red" }}>{passwordError}</p>}
-        </fieldset>
+        <FieldText
+          type="email"
+          id="email" 
+          name="Email" 
+          value={user.Email} 
+          onChange={handleUsernameInput}
+          label="Correo Electrónico"
+          isRequired
+        ></FieldText>
+        <FieldText
+        type="password"
+        id="password" 
+        name="Password"
+        value={user.Password}
+        onChange={handlePasswordInput}
+        label="Contraseña"
+        isRequired>
+          {
+            
+            <div {...passwordError.length > 0 ? <p>La contraseña no cumple con los requisitos:</p> 
+            : ""}>
+            {
+            passwordError.map((err, index) => (
+                <p key={index} style={{ color: err.isValid? "red": "green", fontSize: "0.8em", margin: "0" }}>
+                  {(err.isValid? "❌": "✔️") + " - "  + err.message}
+                </p>
+            ))
+            }
+           
+            </div>
+            
+          }
+        </FieldText>
 
         <button type="submit">Enviar</button>
         <p>
