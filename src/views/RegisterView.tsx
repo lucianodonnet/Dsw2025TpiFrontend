@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import ErrorPopup from "../components/Popup";
 import FieldText from "../components/common/Field";
 import { useValidation } from "../hooks/useValidation";
-import { regexPasswordMap } from "../utils/Validator";
+import { regexPasswordMap } from "../utils/validator";
 
 function RegisterView() {
   const [error, setError] = useState<string>("");
@@ -94,8 +94,8 @@ function RegisterView() {
             : ""}>
             {
               passwordErrors.map((err) => (
-                <p key={err.message} style={{ color: err.isValid? "red":"green", fontSize: "0.8em", margin: "0" }}>
-                  {(err.isValid? "\u2716": "\u2714") + " - "  + err.message}
+                <p key={err.message} style={{ color: err.isValid? "green": "red", fontSize: "0.8em", margin: "0" }}>
+                  {(err.isValid? "\u2714" : "\u2716") + " - "  + err.message}
                 </p>
               ))
             }

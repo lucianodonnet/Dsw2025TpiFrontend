@@ -1,7 +1,7 @@
 import {useState} from "react";
 import { useTranslation } from "react-i18next";
 import i18n from "../i18n/i18n";
-import { RegexMap, Valid, Validator } from "../utils/Validator";
+import { RegexMap, Valid, Validator } from "../utils/validator";
 
 
 const useValidation = (): [Valid[], (field: string, validation: RegexMap) => void] => {
