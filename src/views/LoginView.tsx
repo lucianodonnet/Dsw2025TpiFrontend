@@ -4,8 +4,9 @@ import logo from "../assets/images/plataformarar.png";
 import "../styles/login.css";
 import { Link } from "react-router-dom";
 import Popup from "../components/Popup";
-import { validPassword } from "../utils/auth";
 import FieldText from "../components/common/Field";
+import { useValidation } from "../hooks/useValidation";
+import { regexPasswordMap } from "../utils/Validator";
 function LoginPage() {
   const [error, setError] = useState<string>("");
   const [satisfactorio, setSatisfactorio] = useState<string>("");
@@ -14,26 +15,19 @@ function LoginPage() {
     Password: "",
   });
 
-  const [passwordError, setPasswordError] = useState<{message: string, isValid: Boolean}[]>([]);
 
   const handleUsernameInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUser({ ...user, Email: e.target.value });
   };
-
+  const [passwordErrors, setPasswordError] = useValidation();
   const handlePasswordInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
     const newPassword = e.target.value;
     setUser({ ...user, Password: newPassword });
-    const message = validPassword(newPassword);
-    const mappedMessages = message.map(([msg, isValid]) => ({message: msg, isValid: isValid}));
-    setPasswordError(mappedMessages);
+    setPasswordError(newPassword, regexPasswordMap);
   };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validPassword(user.Password)) {
-      setError("Por favor, corrige el formato de la contraseña.");
-      return;
-    }
     const data = await login(user);
 
     if (data?.token) {
@@ -58,30 +52,26 @@ function LoginPage() {
           value={user.Email} 
           onChange={handleUsernameInput}
           label="Correo Electrónico"
-          isRequired
-        ></FieldText>
+          isRequired></FieldText>
         <FieldText
-        type="password"
-        id="password" 
-        name="Password"
-        value={user.Password}
-        onChange={handlePasswordInput}
-        label="Contraseña"
-        isRequired>
-          {
-            
-            <div {...passwordError.length > 0 ? <p>La contraseña no cumple con los requisitos:</p> 
+          type="password"
+          id="password" 
+          name="Password"
+          value={user.Password}
+          onChange={handlePasswordInput}
+          label="Contraseña"
+          isRequired>
+          { 
+            <div {...passwordErrors.length > 0 ? <p>La contraseña no cumple con los requisitos:</p> 
             : ""}>
             {
-            passwordError.map((err, index) => (
-                <p key={index} style={{ color: err.isValid? "red": "green", fontSize: "0.8em", margin: "0" }}>
-                  {(err.isValid? "❌": "✔️") + " - "  + err.message}
+              passwordErrors.map((err) => (
+                <p key={err.message} style={{ color: err.isValid? "red":"green", fontSize: "0.8em", margin: "0" }}>
+                  {(err.isValid? "\u2716": "\u2714") + " - "  + err.message}
                 </p>
-            ))
+              ))
             }
-           
             </div>
-            
           }
         </FieldText>
 

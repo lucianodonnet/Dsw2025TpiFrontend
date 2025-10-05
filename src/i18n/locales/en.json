@@ -1,0 +1,17 @@
+{
+    "translation": {
+        "Email": "Email",
+        "Password": "Password",
+        "Login": "Login",
+        "The password does not meet the requirements:": "The password does not meet the requirements:",
+        "At least 8 characters long": "At least 8 characters long",
+        "At least one uppercase letter": "At least one uppercase letter",
+        "At least one lowercase letter": "At least one lowercase letter",
+        "At least one number": "At least one number",
+        "At least one special character (!@#$%^&*)": "At least one special character (!@#$%^&*)",
+        "No spaces": "No spaces",
+        "Submit": "Submit",
+        "Register": "Register",
+        "This field is required.": "This field is required."
+    }
+}

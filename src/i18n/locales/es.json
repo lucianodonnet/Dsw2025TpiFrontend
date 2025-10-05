@@ -1,0 +1,17 @@
+{
+    "translation":{
+        "Email": "Correo Electrónico",
+        "Password": "Contraseña",
+        "Login": "Iniciar Sesión",
+        "The password does not meet the requirements:": "La contraseña no cumple con los requisitos:",
+        "At least 8 characters long": "Al menos 8 caracteres de longitud",
+        "At least one uppercase letter": "Al menos una letra mayúscula",
+        "At least one lowercase letter": "Al menos una letra minúscula",
+        "At least one number": "Al menos un número",
+        "At least one special character (!@#$%^&*)": "Al menos un carácter especial (!@#$%^&*)",
+        "No spaces": "Sin espacios",
+        "Submit": "Enviar",
+        "Register": "Registrarse",
+        "This field is required.": "Este campo es obligatorio."
+    }
+}

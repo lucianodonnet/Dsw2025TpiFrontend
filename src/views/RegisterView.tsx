@@ -5,8 +5,8 @@ import logo from "../assets/images/plataformarar.png";
 import { Link } from "react-router-dom";
 import ErrorPopup from "../components/Popup";
 import FieldText from "../components/common/Field";
-import { validPassword } from "../utils/auth";
-
+import { useValidation } from "../hooks/useValidation";
+import { regexPasswordMap } from "../utils/Validator";
 
 function RegisterView() {
   const [error, setError] = useState<string>("");
@@ -24,22 +24,17 @@ function RegisterView() {
     setUser({ ...user, [name.charAt(0).toUpperCase() + name.slice(1)]: value });
   };
 
-  
-  const [passwordErrors, setPasswordError] = useState<{message: string, isValid: boolean}[]>([]);
+  const [passwordErrors, setPasswordError] = useValidation();
   const handlePasswordInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-
-    
     const newPassword = e.target.value;
     setUser({ ...user, Password: newPassword });
-    const message = validPassword(newPassword);
-    let mappedMessages = message.map(([msg, isValid]) => ({message: msg, isValid}));
-    setPasswordError(mappedMessages);
+    setPasswordError(newPassword, regexPasswordMap);
   };
+  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-  
     const data = await register(user);
 
 
@@ -94,19 +89,19 @@ function RegisterView() {
         onChange={handlePasswordInput}
         label="Contraseña"
         isRequired
-        >{
+        >{ 
             <div {...passwordErrors.length > 0 ? <p>La contraseña no cumple con los requisitos:</p> 
             : ""}>
             {
-              passwordErrors.map((err, index) => (
-                  <p key={index} style={{ color: err.isValid? "red":"green", fontSize: "0.8em", margin: "0" }}>
-                  {(err.isValid? "✖️": "✔️") + " - "  + err.message}
-                  </p>
+              passwordErrors.map((err) => (
+                <p key={err.message} style={{ color: err.isValid? "red":"green", fontSize: "0.8em", margin: "0" }}>
+                  {(err.isValid? "\u2716": "\u2714") + " - "  + err.message}
+                </p>
               ))
             }
             </div>
-            
-          }</FieldText>
+          }
+        </FieldText>
 
         <FieldText
         type="date"
