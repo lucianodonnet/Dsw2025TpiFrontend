@@ -48,3 +48,26 @@ export const login = async (user: User) => {
     return { message: "No se pudo conectar con el servidor" };
   }
 };
+
+// === Google Auth ===
+export const loginWithGoogle = async (idToken: string) => {
+  // Si URL.parse te da error en el navegador, cambiá esta línea por:
+  // const GOOGLE_URL = API_URL + "auth/google-login";
+  const GOOGLE_URL = URL.parse(API_URL + "auth/google-login");
+  if (!GOOGLE_URL) {
+    throw new Error("URL de Google inválida");
+  }
+
+  try {
+    const response = await fetch(GOOGLE_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ idToken }),
+    });
+    // Espera algo como { token?, email?, message?, user? }
+    return await response.json();
+  } catch (error) {
+    console.error("Error en login con Google:", error);
+    return { message: "No se pudo conectar con el servidor" };
+  }
+};

@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { login } from "../services/authService";
+import { login, loginWithGoogle } from "../services/authService";
 import logo from "../assets/images/plataformarar.png";
 import "../styles/login.css";
 import { Link } from "react-router-dom";
+import { GoogleLogin, CredentialResponse } from "@react-oauth/google";
 
 function LoginPage() {
   const [user, setUser] = useState({
@@ -29,6 +30,31 @@ function LoginPage() {
     } else {
       alert(data?.message || "Credenciales inválidas");
     }
+  };
+
+  // === Google ===
+  const onGoogleSuccess = async (cred: CredentialResponse) => {
+    try {
+      const idToken = cred.credential;
+      if (!idToken) throw new Error("No llegó id_token de Google");
+
+      const data = await loginWithGoogle(idToken); // POST /api/auth/google-login
+
+      if (data?.token) {
+        localStorage.setItem("token", data.token);
+        alert("Login con Google OK");
+      } else if (data?.email) {
+        alert(`Email validado: ${data.email}`);
+      } else {
+        alert(data?.message || "No autorizado");
+      }
+    } catch (err: any) {
+      alert(err?.message || "Error en login con Google");
+    }
+  };
+
+  const onGoogleError = () => {
+    alert("Falló el login de Google");
   };
 
   return (
@@ -59,7 +85,15 @@ function LoginPage() {
         </fieldset>
 
         <button type="submit">Enviar</button>
-        <p>
+
+        <div style={{ margin: "12px 0", color: "#999" }}>o</div>
+
+        {/* Botón de Google */}
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <GoogleLogin onSuccess={onGoogleSuccess} onError={onGoogleError} />
+        </div>
+
+        <p style={{ marginTop: 12 }}>
           ¿No tienes una cuenta? <Link to="/register">Registrate</Link>
         </p>
       </form>
