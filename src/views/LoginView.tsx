@@ -5,7 +5,8 @@ import "../styles/login.css";
 import { Link } from "react-router-dom";
 import Popup from "../components/Popup";
 import { validPassword } from "../utils/auth";
-import FieldText from "../components/common/Field";
+import FieldText from "../components/common/FieldText";
+import List from "../components/common/List";
 function LoginPage() {
   const [error, setError] = useState<string>("");
   const [satisfactorio, setSatisfactorio] = useState<string>("");
@@ -14,7 +15,7 @@ function LoginPage() {
     Password: "",
   });
 
-  const [passwordError, setPasswordError] = useState<{message: string, isValid: Boolean}[]>([]);
+  const [passwordErrors, setPasswordError] = useState<{message: string, isValid: Boolean}[]>([]);
 
   const handleUsernameInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUser({ ...user, Email: e.target.value });
@@ -60,30 +61,28 @@ function LoginPage() {
           label="Correo Electrónico"
           isRequired
         ></FieldText>
-        <FieldText
-        type="password"
-        id="password" 
-        name="Password"
-        value={user.Password}
-        onChange={handlePasswordInput}
-        label="Contraseña"
-        isRequired>
-          {
-            
-            <div {...passwordError.length > 0 ? <p>La contraseña no cumple con los requisitos:</p> 
-            : ""}>
-            {
-            passwordError.map((err, index) => (
-                <p key={index} style={{ color: err.isValid? "red": "green", fontSize: "0.8em", margin: "0" }}>
-                  {(err.isValid? "❌": "✔️") + " - "  + err.message}
-                </p>
-            ))
-            }
-           
-            </div>
-            
-          }
-        </FieldText>
+        <div>
+          <FieldText
+          type="password"
+          id="password" 
+          name="Password" 
+          value={user.Password} 
+          onChange={handlePasswordInput}
+          label="Contraseña"
+          isRequired
+          />
+          
+          <List>
+              {
+                passwordErrors.map((err, index) => (
+                    <li key={index} style={{ color: err.isValid? "red":"green", fontSize: "0.8em", margin: "0" }}>
+                    {(err.isValid? "\u2714": "\u2716") + " - "  + err.message}
+                    </li>
+                ))
+              }
+          </List>
+          
+        </div>
 
         <button type="submit">Enviar</button>
         <p>

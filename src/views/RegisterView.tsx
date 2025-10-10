@@ -4,8 +4,9 @@ import "../styles/login.css";
 import logo from "../assets/images/plataformarar.png";
 import { Link } from "react-router-dom";
 import ErrorPopup from "../components/Popup";
-import FieldText from "../components/common/Field";
+import FieldText from "../components/common/FieldText";
 import { validPassword } from "../utils/auth";
+import List from "../components/common/List";
 
 
 function RegisterView() {
@@ -85,29 +86,29 @@ function RegisterView() {
         label="Usuario"
         isRequired
         ></FieldText>
-
-        <FieldText
-        type="password"
-        id="password" 
-        name="Password" 
-        value={user.Password} 
-        onChange={handlePasswordInput}
-        label="Contraseña"
-        isRequired
-        >{
-            <div {...passwordErrors.length > 0 ? <p>La contraseña no cumple con los requisitos:</p> 
-            : ""}>
-            {
-              passwordErrors.map((err, index) => (
-                  <p key={index} style={{ color: err.isValid? "red":"green", fontSize: "0.8em", margin: "0" }}>
-                  {(err.isValid? "✖️": "✔️") + " - "  + err.message}
-                  </p>
-              ))
-            }
-            </div>
-            
-          }</FieldText>
-
+        <div>
+          <FieldText
+          type="password"
+          id="password" 
+          name="Password" 
+          value={user.Password} 
+          onChange={handlePasswordInput}
+          label="Contraseña"
+          isRequired
+          />
+          
+          <List>
+              {
+                passwordErrors.map((err, index) => (
+                    <li key={index} style={{ color: err.isValid? "red":"green", fontSize: "0.8em", margin: "0" }}>
+                    {(err.isValid? "\u2714": "\u2716") + " - "  + err.message}
+                    </li>
+                ))
+              }
+          </List>
+          
+        </div>
+        
         <FieldText
         type="date"
         id="fechaNacimiento" 
@@ -136,5 +137,5 @@ function RegisterView() {
 
   );
 }
-
+// {...passwordErrors.length > 0 ? <p>La contraseña no cumple con los requisitos:</p> : ""}
 export default RegisterView;
