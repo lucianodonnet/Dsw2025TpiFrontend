@@ -5,9 +5,8 @@ import logo from "../assets/images/plataformarar.png";
 import { Link } from "react-router-dom";
 import ErrorPopup from "../components/Popup";
 import FieldText from "../components/common/FieldText";
-import { validPassword } from "../utils/auth";
+import { validPassword } from "../utils/passwordValidation";
 import List from "../components/common/List";
-
 
 function RegisterView() {
   const [error, setError] = useState<string>("");
@@ -25,31 +24,31 @@ function RegisterView() {
     setUser({ ...user, [name.charAt(0).toUpperCase() + name.slice(1)]: value });
   };
 
-  
-  const [passwordErrors, setPasswordError] = useState<{message: string, isValid: boolean}[]>([]);
+  const [passwordErrors, setPasswordError] = useState<
+    { message: string; isValid: boolean }[]
+  >([]);
   const handlePasswordInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
 
-    
     const newPassword = e.target.value;
     setUser({ ...user, Password: newPassword });
     const message = validPassword(newPassword);
-    let mappedMessages = message.map(([msg, isValid]) => ({message: msg, isValid}));
+    let mappedMessages = message.map(([msg, isValid]) => ({
+      message: msg,
+      isValid,
+    }));
     setPasswordError(mappedMessages);
   };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-  
     const data = await register(user);
-
 
     if (data.ok && data.id) {
       alert("Usuario registrado con éxito");
     } else {
       setError(data.message || "Error en el registro");
     }
-
   };
 
   return (
@@ -60,63 +59,66 @@ function RegisterView() {
         <h2>REGISTRARSE</h2>
 
         <FieldText
-        id="apellido" 
-        name="Apellido" 
-        value={user.Apellido} 
-        onChange={handleChange}
-        label="Apellido"
-        isRequired
+          id="apellido"
+          name="Apellido"
+          value={user.Apellido}
+          onChange={handleChange}
+          label="Apellido"
+          isRequired
         ></FieldText>
 
         <FieldText
-        id="nombre" 
-        name="Nombre" 
-        value={user.Nombre} 
-        onChange={handleChange}
-        label="Nombre"
-        isRequired
+          id="nombre"
+          name="Nombre"
+          value={user.Nombre}
+          onChange={handleChange}
+          label="Nombre"
+          isRequired
         ></FieldText>
 
-
-        <FieldText 
-        id="username" 
-        name="Username" 
-        value={user.Username} 
-        onChange={handleChange}
-        label="Usuario"
-        isRequired
+        <FieldText
+          id="username"
+          name="Username"
+          value={user.Username}
+          onChange={handleChange}
+          label="Usuario"
+          isRequired
         ></FieldText>
         <div>
           <FieldText
-          type="password"
-          id="password" 
-          name="Password" 
-          value={user.Password} 
-          onChange={handlePasswordInput}
-          label="Contraseña"
-          isRequired
+            type="password"
+            id="password"
+            name="Password"
+            value={user.Password}
+            onChange={handlePasswordInput}
+            label="Contraseña"
+            isRequired
           />
-          
+
           <List>
-              {
-                passwordErrors.map((err, index) => (
-                    <li key={index} style={{ color: err.isValid? "red":"green", fontSize: "0.8em", margin: "0" }}>
-                    {(err.isValid? "\u2714": "\u2716") + " - "  + err.message}
-                    </li>
-                ))
-              }
+            {passwordErrors.map((err, index) => (
+              <li
+                key={index}
+                style={{
+                  color: err.isValid ? "red" : "green",
+                  fontSize: "0.8em",
+                  margin: "0",
+                }}
+              >
+                {(err.isValid ? "\u2714" : "\u2716") + " - " + err.message}
+              </li>
+            ))}
           </List>
-          
         </div>
-        
+
         <FieldText
-        type="date"
-        id="fechaNacimiento" 
-        name="FechaNacimiento" 
-        value={user.Password} 
-        onChange={handleChange}
-        label="Fecha de Nacimiento"
-        isRequired
+          type="date"
+          id="fechaNacimiento"
+          name="FechaNacimiento"
+          value={user.Password}
+          onChange={handleChange}
+          label="Fecha de Nacimiento"
+          isRequired
         ></FieldText>
 
         <button type="submit">Registrarse</button>
@@ -124,17 +126,9 @@ function RegisterView() {
           ¿Ya tienes una cuenta? <Link to="/login">Inicia sesión</Link>
         </p>
       </form>
-
-
       error && (
-      <ErrorPopup
-        message={error}
-        onClose={() => setError("")}
-      />
-      )
+      <ErrorPopup message={error} onClose={() => setError("")} />)
     </>
-
-
   );
 }
 // {...passwordErrors.length > 0 ? <p>La contraseña no cumple con los requisitos:</p> : ""}

@@ -9,12 +9,12 @@ export const register = async (credentials: {
   FechaNacimiento: string;
 }) => {
   try {
-    console.log(credentials)
+    console.log(credentials);
     const credentialsToSend = {
       ...credentials,
       FechaNacimiento: credentials.FechaNacimiento
         ? new Date(credentials.FechaNacimiento).toISOString().split("T")[0]
-        : ""
+        : "",
     };
     const response = await fetch(`${API_URL}/auth/register`, {
       method: "POST",
@@ -28,17 +28,15 @@ export const register = async (credentials: {
     return {
       ok: response.ok,
       status: response.status,
-      ...data
+      ...data,
     };
   } catch (error) {
     console.error("Error en registro:", error);
     return {
       ok: false,
-      message: "No se pudo conectar con el servidor"
+      message: "No se pudo conectar con el servidor",
     };
   }
-
-
 };
 
 export const login = async (credentials: {
@@ -54,9 +52,16 @@ export const login = async (credentials: {
 
     // Convertimos la respuesta en JSON
     const data = await response.json();
-    return data;
+    return {
+      ok: response.ok,
+      status: response.status,
+      ...data,
+    };
   } catch (error) {
     console.error("Error en login:", error);
-    return { error };
+    return {
+      ok: false,
+      message: "No se pudo conectar con el servidor",
+    };
   }
 };

@@ -4,7 +4,7 @@ import logo from "../assets/images/plataformarar.png";
 import "../styles/login.css";
 import { Link } from "react-router-dom";
 import Popup from "../components/Popup";
-import { validPassword } from "../utils/auth";
+import { validPassword } from "../utils/passwordValidation";
 import FieldText from "../components/common/FieldText";
 import List from "../components/common/List";
 function LoginPage() {
@@ -15,7 +15,9 @@ function LoginPage() {
     Password: "",
   });
 
-  const [passwordErrors, setPasswordError] = useState<{message: string, isValid: Boolean}[]>([]);
+  const [passwordErrors, setPasswordError] = useState<
+    { message: string; isValid: Boolean }[]
+  >([]);
 
   const handleUsernameInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUser({ ...user, Email: e.target.value });
@@ -25,7 +27,10 @@ function LoginPage() {
     const newPassword = e.target.value;
     setUser({ ...user, Password: newPassword });
     const message = validPassword(newPassword);
-    const mappedMessages = message.map(([msg, isValid]) => ({message: msg, isValid: isValid}));
+    const mappedMessages = message.map(([msg, isValid]) => ({
+      message: msg,
+      isValid: isValid,
+    }));
     setPasswordError(mappedMessages);
   };
 
@@ -54,34 +59,38 @@ function LoginPage() {
 
         <FieldText
           type="email"
-          id="email" 
-          name="Email" 
-          value={user.Email} 
+          id="email"
+          name="Email"
+          value={user.Email}
           onChange={handleUsernameInput}
           label="Correo Electrónico"
           isRequired
         ></FieldText>
         <div>
           <FieldText
-          type="password"
-          id="password" 
-          name="Password" 
-          value={user.Password} 
-          onChange={handlePasswordInput}
-          label="Contraseña"
-          isRequired
+            type="password"
+            id="password"
+            name="Password"
+            value={user.Password}
+            onChange={handlePasswordInput}
+            label="Contraseña"
+            isRequired
           />
-          
+
           <List>
-              {
-                passwordErrors.map((err, index) => (
-                    <li key={index} style={{ color: err.isValid? "red":"green", fontSize: "0.8em", margin: "0" }}>
-                    {(err.isValid? "\u2714": "\u2716") + " - "  + err.message}
-                    </li>
-                ))
-              }
+            {passwordErrors.map((err, index) => (
+              <li
+                key={index}
+                style={{
+                  color: err.isValid ? "red" : "green",
+                  fontSize: "0.8em",
+                  margin: "0",
+                }}
+              >
+                {(err.isValid ? "\u2714" : "\u2716") + " - " + err.message}
+              </li>
+            ))}
           </List>
-          
         </div>
 
         <button type="submit">Enviar</button>
@@ -90,18 +99,10 @@ function LoginPage() {
         </p>
       </form>
 
-      {error && (
-        <Popup
-          message={error}
-          onClose={() => setError("")}
-        />
-      )}
+      {error && <Popup message={error} onClose={() => setError("")} />}
 
       {satisfactorio && (
-        <Popup
-          message={"Bienvenid@"}
-          onClose={() => setSatisfactorio("")}
-        />
+        <Popup message={"Bienvenid@"} onClose={() => setSatisfactorio("")} />
       )}
     </>
   );
