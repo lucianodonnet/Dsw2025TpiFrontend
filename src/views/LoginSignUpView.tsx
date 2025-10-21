@@ -2,7 +2,7 @@ import "../styles/login.css";
 import { login, register } from "../services/authService";
 import { validPassword } from "../utils/passwordValidation";
 import FieldText from "../components/common/FieldText";
-import List from "../components/common/List";
+//import List from "../components/common/List";
 import PopUp from "../components/Popup";
 import logo from "../assets/images/plataformarar.png";
 import user_icon from "../assets/images/person.png";
